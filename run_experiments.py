@@ -100,6 +100,8 @@ def split_dataset(labels,av_names):
     # mid should be an integer
     mid = round(len(av_names)/2)
     # split vectors in the middle
+    # assumes labels are well distributed over array
+    # if not well-distributed, use scikit learn, that guarantees better distribution
     train_set_Y = av_names[:mid]
     train_set_X = labels[:mid]
     test_set_Y = av_names[mid+1:]
@@ -225,25 +227,24 @@ for n_runs in range(NUMBER_OF_RUNS):
     # Normalize size
     new_labels = normalize_label_list(av_labels, max_size)
     # Split into train and test set if required (sometimes we just want to train)
+    # Might want to use scikit version instead
     #train_set_X, train_set_Y, test_set_X, test_set_Y = split_dataset(new_labels,av_names)
     train_set_X = new_labels
     train_set_Y = av_names
+    # I forced test=train for the experiments with full dataset
+    # Do not forget to eliminate this
     test_set_X = train_set_X
     test_set_Y = train_set_Y
-
     print("Train set size %d" % len(train_set_X))
-
     print("Training the classifier...")
     # train the ML model with the train set
     model.train(train_set_X,train_set_Y)
-
     print("Predicting...")
     pred_pairs = []
     # For every element in the test set
     for idx, _label_vector in enumerate(test_set_X):
         if idx % 5000 == 0:
             print("Predicting set: %d" % idx)
-
         # label will be tokenized, but here we need the label as string to reuse the code
         label = ' '.join(_label_vector).strip()
         # then we tokenize again
@@ -256,9 +257,7 @@ for n_runs in range(NUMBER_OF_RUNS):
         #print(av, test_set_Y[idx])
         # save pairs to compute metrics (if required)
         pred_pairs.append([av, test_set_Y[idx]])
-
     print("Computing Metrics...")
-
     # Assuming metrics are required, get confusion matrix from the pairs
     CM = confusion_matrix(pred_pairs)
     for threshold in range(100,0,-5):

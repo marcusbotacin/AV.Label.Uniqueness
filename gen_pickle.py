@@ -1,5 +1,9 @@
 # Associates AV labels with AV engines
 # Author: Marcus Botacin - TAMU - 2022
+# Parse AV labels and stores in a pickle file
+# I adapted the original code to parse and save
+# There still old training code that is not really used in this file
+
 # Import Block
 import sys
 import json
@@ -175,9 +179,9 @@ if len(sys.argv)!=4:
 N_AVS = int(sys.argv[2])
 NUMBER_OF_RUNS = int(sys.argv[3])
 
+# Receives a directory hosting all AV label files
 print("Reading input file list...")
 files = read_file(sys.argv[1])
-
 all_av_names = set()
 all_data = []
 for _file in files:
