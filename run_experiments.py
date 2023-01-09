@@ -4,11 +4,9 @@
 import sys
 import os
 import json
-#import pandas as pd
 import numpy as np
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.ensemble import RandomForestClassifier as Classifier
-#import IPython
 import pickle
 import random
 
@@ -175,7 +173,6 @@ def confusion_matrix(pred_pairs):
             # ignore division by zero
             if sum != 0:
                 matrix[line][column] = matrix[line][column] / float(sum)
-    #np.savetxt("matrix.txt",matrix)
     return matrix
 
 if len(sys.argv)!=5:
@@ -200,18 +197,14 @@ all_data = pickle.load(f)
 
 average = np.zeros(shape=(20,NUMBER_OF_RUNS))
 for n_runs in range(NUMBER_OF_RUNS):
-
     print("RUN: %d" % n_runs)
-
     # Var Initialization
     max_size = 0
     av_names = []
     av_labels = []
     model = Model()
-
     target_avs = random.sample(list(all_av_names),N_AVS)
     print("Selected AVs: ",target_avs)
-
     # Read all files in the list
     for idx, data in enumerate(all_data):
         a = data[0]
@@ -279,15 +272,12 @@ for n_runs in range(NUMBER_OF_RUNS):
                 indice = int((100-threshold)/5)
                 average[indice][n_runs] = n_acc
         print("Identify %d %d of %d AVs (%f)" % (threshold,n_acc,len(CM),100*n_acc/float(len(CM))))
-        #print(CM)
 
 f = open(filename,'w')
-
 for lines in range(20):
     _sum = 0
     for cols in range(NUMBER_OF_RUNS):
         _sum = _sum + average[lines][cols]
     _mean = (_sum/float(NUMBER_OF_RUNS))/float(N_AVS)
-    #print("%f" % _mean)
     print("Identify on AVERAGE [THRESHOLD=%d]: %f" % (100-(5*lines),_mean))
     f.write("Identify on AVERAGE [THRESHOLD=%d]: %f\n" % (100-(5*lines),_mean))

@@ -3,11 +3,9 @@
 # Import Block
 import sys
 import json
-#import pandas as pd
 import numpy as np
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.ensemble import RandomForestClassifier as Classifier
-#import IPython
 import pickle
 import random
 
@@ -202,4 +200,3 @@ f = open("all_av_names.pkl","wb")
 pickle.dump(all_av_names,f)
 f2 = open("all_data.pkl","wb")
 pickle.dump(all_data,f2)
-
